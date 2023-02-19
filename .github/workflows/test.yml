@@ -1,0 +1,34 @@
+name: Run tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          export PATH="$HOME/.cargo/bin:$PATH"
+          wasm-pack --version
+
+      - name: Install Firefox
+        uses: browser-actions/setup-firefox@v1
+
+      - name: Build
+        run: |
+          cargo build --target wasm32-unknown-unknown
+
+      - name: Test
+        run: |
+          wasm-pack test --firefox --headless
