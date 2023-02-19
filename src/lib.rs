@@ -39,7 +39,7 @@ pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Request<Body>
     http_request
 }
 
-pub async fn to_worker_response(mut response: Response<Body>) -> WorkerResponse {
+pub async fn to_worker_response(mut response: Response) -> WorkerResponse {
     let bytes = match http_body::Body::data(response.body_mut()).await {
         None => vec![],
         Some(body_bytes) => match body_bytes {
@@ -69,7 +69,9 @@ pub async fn to_worker_response(mut response: Response<Body>) -> WorkerResponse 
 mod tests {
     use super::*;
     use axum::{
-        body::Bytes
+        body::Bytes,
+        response::{Html},
+        response::IntoResponse
     };
     use wasm_bindgen_test::{*};
     use worker::{RequestInit, ResponseBody, Method as WorkerMethod};
@@ -108,17 +110,11 @@ mod tests {
 
     #[wasm_bindgen_test]
     async fn it_should_convert_the_axum_response_to_a_worker_response() {
-        let response = Response::builder()
-            .status(200)
-            .header("Content-Type", "text/html")
-            .body(Body::from("Hello World!"))
-            .unwrap();
-
-
+        let response = Html::from("Hello World!").into_response();
         let worker_response = to_worker_response(response).await;
 
         assert_eq!(worker_response.status_code(), 200);
-        assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html");
+        assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html; charset=utf-8");
         let body = match worker_response.body() {
             ResponseBody::Body(body) => body.clone(),
             _ => vec![]
@@ -128,10 +124,11 @@ mod tests {
 
     #[wasm_bindgen_test]
     async fn it_should_convert_the_axum_response_to_a_worker_response_with_an_empty_body() {
+        let body = http_body::combinators::UnsyncBoxBody::default();
         let response = Response::builder()
             .status(200)
             .header("Content-Type", "text/html")
-            .body(Body::empty())
+            .body(body)
             .unwrap();
 
 
@@ -139,7 +136,6 @@ mod tests {
 
         assert_eq!(worker_response.status_code(), 200);
         assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html");
-
         let body = match worker_response.body() {
             ResponseBody::Body(body) => body.clone(),
             _ => b"should be empty".to_vec()
