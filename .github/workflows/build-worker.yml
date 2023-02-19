@@ -1,0 +1,30 @@
+name: Verify Cloudflare worker builds
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
+      - name: Run Wrangler build
+        run: |
+          cd example && 
+          npx wrangler publish --dry-run --outdir=dist

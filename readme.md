@@ -7,3 +7,6 @@ An adapter to easily allow an [Axum](https://github.com/tokio-rs/axum) server to
 
 ## Building
 `cargo build --target wasm32-unknown-unknown`
+
+## Example
+The `/example` directory contains a Cloudflare worker running an Axum sever
