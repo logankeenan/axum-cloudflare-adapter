@@ -1,3 +1,38 @@
+//! Axum Cloudflare
+//!
+//! Simple functions to convert a Cloudflare worker request to an Axum request and
+//! then convert the Axum response to a Worker reponse.
+//!
+
+//! ```
+//! use worker::*;
+//!
+//! use axum::{
+//! 		response::{Html},
+//! 		routing::get,
+//! 		Router as AxumRouter,
+//! };
+//! use axum_cloudflare::{to_axum_request, to_worker_response};
+//! use tower_service::Service;
+//!
+//! async fn index() -> Html<&'static str> {
+//! 		Html("<p>Hello from Axum!</p>")
+//! }
+//!
+//! #[event(fetch)]
+//! pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
+//! 		let mut _router: AxumRouter = AxumRouter::new()
+//! 				.route("/", get(index));
+//!
+//! 		let axum_request = to_axum_request(req).await;
+//! 		let axum_response = _router.call(axum_request).await.unwrap();
+//! 		let response = to_worker_response(axum_response).await;
+//!
+//! 		Ok(response)
+//! }
+//!
+//! ```
+
 use std::str::FromStr;
 use axum::{
     body::Body,
