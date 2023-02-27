@@ -49,7 +49,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "axum-cloudflare"
+name = "axum-cloudflare-adapter"
 version = "0.1.0"
 dependencies = [
  "axum",
@@ -618,7 +618,7 @@ name = "todo-worker"
 version = "0.0.0"
 dependencies = [
  "axum",
- "axum-cloudflare",
+ "axum-cloudflare-adapter",
  "cfg-if 0.1.10",
  "console_error_panic_hook",
  "serde_json",

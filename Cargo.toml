@@ -1,5 +1,5 @@
 [package]
-name = "axum-cloudflare"
+name = "axum-cloudflare-adapter"
 version = "0.1.0"
 edition = "2021"
 

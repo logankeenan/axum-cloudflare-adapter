@@ -1,4 +1,4 @@
-name = "axum-cloudflare-example"
+name = "axum-cloudflare-adapter-example"
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 

@@ -5,7 +5,7 @@ use axum::{
 		routing::get,
 		Router as AxumRouter,
 };
-use axum_cloudflare::{to_axum_request, to_worker_response};
+use axum_cloudflare_adapter::{to_axum_request, to_worker_response};
 use tower_service::Service;
 
 mod utils;

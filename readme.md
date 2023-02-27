@@ -1,4 +1,4 @@
-# axum-cloudflare
+# axum-cloudflare-adapter
 
 An adapter to easily allow an [Axum](https://github.com/tokio-rs/axum) server to be run within a Cloudflare worker.
 
