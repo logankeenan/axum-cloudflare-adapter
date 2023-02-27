@@ -2,6 +2,20 @@
 name = "axum-cloudflare-adapter"
 version = "0.1.0"
 edition = "2021"
+authors = ["Logan Keenan"]
+description = "An adapter to easily allow an Axum server to be run within a Cloudflare worker."
+rust-version = "1.67.1"
+repository = "https://github.com/logankeenan/axum-cloudflare-adapter"
+license = "MIT"
+keywords = ["Cloudflare", "Axum"]
+exclude = [
+    "example/",
+    ".github/",
+    ".nvmrc"
+]
+
+[lib]
+crate-type = ["cdylib", "lib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
