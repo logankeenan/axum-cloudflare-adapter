@@ -21,7 +21,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 axum = { version = "0.6.7", default-features = false }
-worker = { version = "0.0.12 "}
+worker = { version = "0.0.13 "}
 http-body = "0.4.5"
 
 [dev-dependencies]

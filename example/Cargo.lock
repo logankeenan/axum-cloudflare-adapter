@@ -525,6 +525,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde-wasm-bindgen"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e3b4c031cd0d9014307d82b8abf653c0290fbdaeb4c02d00c63cf52f728628bf"
+dependencies = [
+ "js-sys",
+ "serde",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "serde_derive"
 version = "1.0.152"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -917,9 +928,9 @@ checksum = "447660ad36a13288b1db4d4248e857b510e8c3a225c822ba4fb748c0aafecffd"
 
 [[package]]
 name = "worker"
-version = "0.0.12"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ca55ce51b3bf01da5a20598af220c5d3abf91f1978a50a0620ef966c39e3180"
+checksum = "f1318524ba8c0302553ef007c5437ff51589f144b664ec5fbdd090f904b05a3c"
 dependencies = [
  "async-trait",
  "chrono",
@@ -931,6 +942,7 @@ dependencies = [
  "matchit 0.4.6",
  "pin-project",
  "serde",
+ "serde-wasm-bindgen",
  "serde_json",
  "url",
  "wasm-bindgen",
@@ -958,9 +970,9 @@ dependencies = [
 
 [[package]]
 name = "worker-macros"
-version = "0.0.6"
+version = "0.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c29ce5a41f5e7e644bc683681b62aed3adac838e01d18eb4e02a4dc30d4ac69"
+checksum = "9c621e3ad64ad7699776c07e58bc2418506850349a77d64a9a57101dd3288258"
 dependencies = [
  "async-trait",
  "proc-macro2",
@@ -974,9 +986,9 @@ dependencies = [
 
 [[package]]
 name = "worker-sys"
-version = "0.0.6"
+version = "0.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "825732b9b6360d6b1f5f614248317826cebf4878e36f61ccc71ca9dd53de8b41"
+checksum = "90f33ccde16fd5f0e0d1e8b260e7f8fdbb68f56bd5d115050bf3e5ffef0d1671"
 dependencies = [
  "cfg-if 1.0.0",
  "js-sys",

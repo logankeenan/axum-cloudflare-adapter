@@ -6,6 +6,4 @@ compatibility_date = "2022-01-20"
 WORKERS_RS_VERSION = "0.0.11"
 
 [build]
-#command = "cargo install -q worker-build --version 0.0.7 && worker-build --release"
-# https://github.com/cloudflare/workers-rs/issues/276#issuecomment-1425748586
-command = "cargo install -q worker-build --git https://github.com/cloudflare/workers-rs.git --rev b4b9cd1f15feac412b6f9e9e9209458cd3b98430 && worker-build --release"
+command = "cargo install -q worker-build --version 0.0.9 && worker-build --release"
