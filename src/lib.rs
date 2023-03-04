@@ -24,15 +24,15 @@
 //! 		let mut _router: AxumRouter = AxumRouter::new()
 //! 				.route("/", get(index));
 //!
-//! 		let axum_request = to_axum_request(req).await;
+//! 		let axum_request = to_axum_request(req).await.unwrap();
 //! 		let axum_response = _router.call(axum_request).await.unwrap();
-//! 		let response = to_worker_response(axum_response).await;
+//! 		let response = to_worker_response(axum_response).await.unwrap();
 //!
 //! 		Ok(response)
 //! }
 //!
 //! ```
-
+mod error;
 use std::str::FromStr;
 use axum::{
     body::Body,
@@ -45,36 +45,38 @@ use worker::{
     Response as WorkerResponse,
     Headers,
 };
+pub use error::Error;
 
-pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Request<Body> {
-    let method = Method::from_str(worker_request.method().to_string().as_str()).expect("Invalid Method");
 
-    let uri = Uri::from_str(worker_request.url().expect("Failed to parse worked URL")
+pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Request<Body>, Error> {
+    let method = Method::from_str(worker_request.method().to_string().as_str())?;
+
+    let uri = Uri::from_str(worker_request.url()?
         .to_string()
-        .as_str())
-        .expect("Failed to create URI");
+        .as_str())?;
 
-    let body = worker_request.bytes().await.expect("failed to parse Worker Body");
+    let body = worker_request.bytes().await?;
 
 
     let mut http_request = Request::builder()
         .method(method)
         .uri(uri)
-        .body(Body::from(body))
-        .expect("Invalid HTTP request");
+        .body(Body::from(body))?;
 
 
     for (header_name, header_value) in worker_request.headers() {
+
+
         http_request.headers_mut().insert(
-            HeaderName::from_str(header_name.as_str()).expect("Invalid Header Name"),
-            header_value.parse().expect("Invalid Header Value"),
+            HeaderName::from_str(header_name.as_str())?,
+            header_value.parse()?,
         );
     }
 
-    http_request
+    Ok(http_request)
 }
 
-pub async fn to_worker_response(mut response: Response) -> WorkerResponse {
+pub async fn to_worker_response(mut response: Response) -> Result<WorkerResponse, Error> {
     let bytes = match http_body::Body::data(response.body_mut()).await {
         None => vec![],
         Some(body_bytes) => match body_bytes {
@@ -82,21 +84,22 @@ pub async fn to_worker_response(mut response: Response) -> WorkerResponse {
             Err(_) => vec![]
         },
     };
+
     let code = response.status().as_u16();
 
-    let mut worker_response = WorkerResponse::from_bytes(bytes).expect("Error parsing Body Bytes");
+    let mut worker_response = WorkerResponse::from_bytes(bytes)?;
     worker_response = worker_response.with_status(code);
 
     let mut headers = Headers::new();
     for (key, value) in response.headers().iter() {
         headers.set(
             key.as_str(),
-            value.to_str().expect("failed to convert header value to str"),
+            value.to_str()?,
         ).unwrap()
     }
     worker_response = worker_response.with_headers(headers);
 
-    worker_response
+    Ok(worker_response)
 }
 
 
@@ -106,7 +109,7 @@ mod tests {
     use axum::{
         body::Bytes,
         response::{Html},
-        response::IntoResponse
+        response::IntoResponse,
     };
     use wasm_bindgen_test::{*};
     use worker::{RequestInit, ResponseBody, Method as WorkerMethod};
@@ -122,7 +125,7 @@ mod tests {
         request_init.with_method(WorkerMethod::Get);
         let worker_request = WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
 
-        let request = to_axum_request(worker_request).await;
+        let request = to_axum_request(worker_request).await.unwrap();
 
         assert_eq!(request.uri(), "https://logankeenan.com");
         assert_eq!(request.method(), "GET");
@@ -137,7 +140,7 @@ mod tests {
         request_init.with_method(WorkerMethod::Post);
         let worker_request = WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
 
-        let mut request = to_axum_request(worker_request).await;
+        let mut request = to_axum_request(worker_request).await.unwrap();
 
         let body_bytes: Bytes = http_body::Body::data(request.body_mut()).await.unwrap().unwrap();
         assert_eq!(body_bytes.to_vec(), b"hello world!");
@@ -146,7 +149,7 @@ mod tests {
     #[wasm_bindgen_test]
     async fn it_should_convert_the_axum_response_to_a_worker_response() {
         let response = Html::from("Hello World!").into_response();
-        let worker_response = to_worker_response(response).await;
+        let worker_response = to_worker_response(response).await.unwrap();
 
         assert_eq!(worker_response.status_code(), 200);
         assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html; charset=utf-8");
@@ -167,7 +170,7 @@ mod tests {
             .unwrap();
 
 
-        let worker_response = to_worker_response(response).await;
+        let worker_response = to_worker_response(response).await.unwrap();
 
         assert_eq!(worker_response.status_code(), 200);
         assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html");

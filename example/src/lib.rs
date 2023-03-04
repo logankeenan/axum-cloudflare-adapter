@@ -34,9 +34,9 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 		let mut _router: AxumRouter = AxumRouter::new()
 				.route("/", get(index));
 
-		let axum_request = to_axum_request(req).await;
+		let axum_request = to_axum_request(req).await.unwrap();
 		let axum_response = _router.call(axum_request).await.unwrap();
-		let response = to_worker_response(axum_response).await;
+		let response = to_worker_response(axum_response).await.unwrap();
 
 
 		Ok(response)
