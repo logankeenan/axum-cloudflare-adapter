@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "axum-cloudflare-adapter"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "axum",
  "http-body",
@@ -634,6 +634,7 @@ dependencies = [
  "console_error_panic_hook",
  "serde_json",
  "tower-service",
+ "url",
  "worker",
 ]
 
