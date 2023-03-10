@@ -34,7 +34,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 ```
 
 ## Running tests
-`wasm-pack test --firefox --headless`
+`cd adapter && wasm-pack test --firefox --headless`
 
 ## Building
 `cargo build --target wasm32-unknown-unknown`

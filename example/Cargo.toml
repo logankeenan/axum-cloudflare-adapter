@@ -15,7 +15,7 @@ worker = "0.0.13"
 serde_json = "1.0.67"
 axum = { version = "0.6.7", default-features = false }
 tower-service = "0.3.2"
-axum-cloudflare-adapter = { path = "../" }
+axum-cloudflare-adapter = { path = "../adapter" }
 
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
