@@ -1,2 +1,4 @@
 /target
 /adapter/Cargo.lock
+/macros/Cargo.lock
+Cargo.lock
