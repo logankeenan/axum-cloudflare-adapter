@@ -51,7 +51,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 
 ## Building
 
-`cd adapter cargo build --target wasm32-unknown-unknown`
+`cd adapter && cargo build --target wasm32-unknown-unknown`
 
 ## Example
 
