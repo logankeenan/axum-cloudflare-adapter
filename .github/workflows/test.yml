@@ -27,8 +27,10 @@ jobs:
 
       - name: Build
         run: |
+          cd adapter
           cargo build --target wasm32-unknown-unknown
 
       - name: Test
         run: |
+          cd adapter
           wasm-pack test --firefox --headless

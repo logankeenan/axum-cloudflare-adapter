@@ -13,9 +13,10 @@ use axum::{
     routing::get,
     Router as AxumRouter,
 };
-use axum_cloudflare_adapter::{to_axum_request, to_worker_response};
+use axum_cloudflare_adapter::{to_axum_request, to_worker_response, worker_route_compat};
 use tower_service::Service;
 
+#[worker_route_compat]
 async fn index() -> Html<&'static str> {
 		Html("<p>Hello from Axum!</p>")
 }
@@ -34,7 +35,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 ```
 
 ## Running tests
-`wasm-pack test --firefox --headless`
+`cd adapter && wasm-pack test --firefox --headless`
 
 ## Building
 `cargo build --target wasm32-unknown-unknown`
