@@ -11,19 +11,34 @@
 //! 		response::{Html},
 //! 		routing::get,
 //! 		Router as AxumRouter,
+//!         extract::State,
 //! };
-//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response, worker_route_compat};
+//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response, worker_route_compat, EnvWrapper};
 //! use tower_service::Service;
+//! use std::ops::Deref;
+//!
+//! #[derive(Clone)]
+//! pub struct AxumState {
+//!    	pub env_wrapper: EnvWrapper,
+//! }
 //!
 //! #[worker_route_compat]
-//! async fn index() -> Html<&'static str> {
+//! async fn index(State(state): State<AxumState>) -> Html<&'static str> {
+//! 		let env: &Env = state.env_wrapper.env.deref();
+//! 		let worker_rs_version: Var = env.var("WORKERS_RS_VERSION").unwrap();
+//!         console_log!("WORKERS_RS_VERSION: {}", worker_rs_version.to_string());
+//!
 //! 		Html("<p>Hello from Axum!</p>")
 //! }
 //!
 //! #[event(fetch)]
 //! pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
+//!
 //! 		let mut _router: AxumRouter = AxumRouter::new()
-//! 				.route("/", get(index));
+//! 				.route("/", get(index))
+//!                 .with_state(AxumState {
+//! 				    env_wrapper: EnvWrapper::new(env),
+//! 		        });
 //!
 //! 		let axum_request = to_axum_request(req).await.unwrap();
 //! 		let axum_response = _router.call(axum_request).await.unwrap();
@@ -34,7 +49,9 @@
 //!
 //! ```
 mod error;
+
 use std::str::FromStr;
+use std::sync::Arc;
 use axum::{
     body::Body,
     http::{Method, Request, Uri},
@@ -65,8 +82,6 @@ pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Reques
 
 
     for (header_name, header_value) in worker_request.headers() {
-
-
         http_request.headers_mut().insert(
             HeaderName::from_str(header_name.as_str())?,
             header_value.parse()?,
@@ -104,6 +119,22 @@ pub async fn to_worker_response(mut response: Response) -> Result<WorkerResponse
 
 pub use axum_cloudflare_adapter_macros::worker_route_compat;
 
+#[derive(Clone)]
+pub struct EnvWrapper {
+    pub env: Arc<worker::Env>,
+}
+
+impl EnvWrapper {
+    pub fn new(env: worker::Env) -> Self {
+        Self {
+            env: Arc::new(env),
+        }
+    }
+}
+
+unsafe impl Send for EnvWrapper {}
+
+unsafe impl Sync for EnvWrapper {}
 
 #[cfg(test)]
 mod tests {
