@@ -1,18 +1,15 @@
+use std::ops::Deref;
 use std::str::FromStr;
 use axum::{
+		extract::{Path, State},
 		response::{Html},
 		routing::get,
 		Router as AxumRouter,
+		response::IntoResponse,
 };
-use axum::extract::Path;
-use axum::response::IntoResponse;
-use axum_cloudflare_adapter::{
-		to_axum_request,
-		to_worker_response,
-		worker_route_compat,
-};
+use axum_cloudflare_adapter::{EnvWrapper, to_axum_request, to_worker_response, worker_route_compat};
 use tower_service::Service;
-use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures};
+use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures, Var};
 
 mod utils;
 
@@ -29,10 +26,16 @@ fn log_request(req: &Request) {
 use url::Url;
 
 #[worker_route_compat]
-pub async fn index() -> impl IntoResponse {
+pub async fn index(State(state): State<AxumState>) -> impl IntoResponse {
 		let url = Url::from_str("https://logankeenan.com").unwrap();
 		let mut response = worker::Fetch::Url(url).send().await.unwrap();
 		let body_text = response.text().await.unwrap();
+
+		let env: &Env = state.env_wrapper.env.deref();
+		let worker_rs_version: Var = env.var("WORKERS_RS_VERSION").unwrap();
+
+		console_log!("WORKERS_RS_VERSION: {}", worker_rs_version.to_string());
+
 		Html(body_text)
 }
 
@@ -45,17 +48,25 @@ pub async fn with_pathname(Path(path): Path<String>) -> impl IntoResponse {
 		Html(body_text)
 }
 
+#[derive(Clone)]
+pub struct AxumState {
+		pub env_wrapper: EnvWrapper,
+}
 
 #[event(fetch)]
-pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
 		log_request(&req);
-
 		// Optionally, get more helpful error messages written to the console in the case of a panic.
 		utils::set_panic_hook();
 
+		let axum_state = AxumState {
+				env_wrapper: EnvWrapper::new(env),
+		};
+
 		let mut _router: AxumRouter = AxumRouter::new()
 				.route("/", get(index))
-				.route("/*path", get(with_pathname));
+				.route("/*path", get(with_pathname))
+				.with_state(axum_state);
 
 		let axum_request = to_axum_request(req).await.unwrap();
 		let axum_response = _router.call(axum_request).await.unwrap();
