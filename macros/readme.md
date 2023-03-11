@@ -1,3 +1,3 @@
 # axum-cloudflare-adapter-macros
 
-See [axum-cloudflare-adapter](github.com/logankeenan/axum-cloudflare-adapter) for details
+See [axum-cloudflare-adapter](https://github.com/logankeenan/axum-cloudflare-adapter) for details
