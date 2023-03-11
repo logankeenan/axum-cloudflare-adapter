@@ -1,7 +1,6 @@
 //! Axum Cloudflare Adapter
 //!
-//! Simple functions to convert a Cloudflare worker request to an Axum request and
-//! then convert the Axum response to a Worker response.
+//! A collection of tools allowing Axum to be run within a Cloudflare worker. See example usage below.
 //!
 
 //! ```
@@ -33,7 +32,6 @@
 //!
 //! #[event(fetch)]
 //! pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
-//!
 //! 		let mut _router: AxumRouter = AxumRouter::new()
 //! 				.route("/", get(index))
 //!                 .with_state(AxumState {
