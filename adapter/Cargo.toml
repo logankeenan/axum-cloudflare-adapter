@@ -7,12 +7,7 @@ description = "An adapter to easily allow an Axum server to be run within a Clou
 rust-version = "1.67.1"
 repository = "https://github.com/logankeenan/axum-cloudflare-adapter"
 license = "MIT"
-keywords = ["Cloudflare", "Axum"]
-exclude = [
-    "example/",
-    ".github/",
-    ".nvmrc"
-]
+keywords = ["Cloudflare", "Axum", "WASM"]
 
 [lib]
 crate-type = ["cdylib", "lib"]

@@ -2,6 +2,12 @@
 name = "axum-cloudflare-adapter-macros"
 version = "0.1.0"
 edition = "2021"
+authors = ["Logan Keenan"]
+description = "An adapter to easily allow an Axum server to be run within a Cloudflare worker."
+rust-version = "1.67.1"
+repository = "https://github.com/logankeenan/axum-cloudflare-adapter"
+license = "MIT"
+keywords = ["Cloudflare", "Axum", "WASM"]
 
 [lib]
 proc-macro = true
