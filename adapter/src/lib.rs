@@ -1,7 +1,7 @@
-//! Axum Cloudflare
+//! Axum Cloudflare Adapter
 //!
 //! Simple functions to convert a Cloudflare worker request to an Axum request and
-//! then convert the Axum response to a Worker reponse.
+//! then convert the Axum response to a Worker response.
 //!
 
 //! ```
@@ -12,9 +12,10 @@
 //! 		routing::get,
 //! 		Router as AxumRouter,
 //! };
-//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response};
+//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response, worker_route_compat};
 //! use tower_service::Service;
 //!
+//! #[worker_route_compat]
 //! async fn index() -> Html<&'static str> {
 //! 		Html("<p>Hello from Axum!</p>")
 //! }

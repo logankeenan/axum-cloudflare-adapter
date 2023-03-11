@@ -4,6 +4,7 @@ use axum::{
 		routing::get,
 		Router as AxumRouter,
 };
+use axum::extract::Path;
 use axum::response::IntoResponse;
 use axum_cloudflare_adapter::{
 		to_axum_request,
@@ -35,6 +36,16 @@ pub async fn index() -> impl IntoResponse {
 		Html(body_text)
 }
 
+#[worker_route_compat]
+pub async fn with_pathname(Path(path): Path<String>) -> impl IntoResponse {
+		let mut url = Url::from_str("https://logankeenan.com").unwrap();
+		url.set_path(path.as_str());
+		let mut response = worker::Fetch::Url(url).send().await.unwrap();
+		let body_text = response.text().await.unwrap();
+		Html(body_text)
+}
+
+
 #[event(fetch)]
 pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
 		log_request(&req);
@@ -43,7 +54,8 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 		utils::set_panic_hook();
 
 		let mut _router: AxumRouter = AxumRouter::new()
-				.route("/", get(index));
+				.route("/", get(index))
+				.route("/*path", get(with_pathname));
 
 		let axum_request = to_axum_request(req).await.unwrap();
 		let axum_response = _router.call(axum_request).await.unwrap();

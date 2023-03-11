@@ -1,3 +1,9 @@
+//! Axum Cloudflare Adapter Macros
+//!
+//! Axum handlers return a `Send` future. However, JS types do not return a `Send`
+//! future. `worker_route_compat` will provide compatability between the return types.
+//! See [axum-cloudflare-adapter](https://github.com/logankeenan/axum-cloudflare-adapter) for usage.
+
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input};
