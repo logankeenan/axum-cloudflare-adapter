@@ -1,12 +1,17 @@
-use worker::*;
-
+use std::str::FromStr;
 use axum::{
 		response::{Html},
 		routing::get,
 		Router as AxumRouter,
 };
-use axum_cloudflare_adapter::{to_axum_request, to_worker_response};
+use axum::response::IntoResponse;
+use axum_cloudflare_adapter::{
+		to_axum_request,
+		to_worker_response,
+		worker_route_compat,
+};
 use tower_service::Service;
+use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures};
 
 mod utils;
 
@@ -20,8 +25,14 @@ fn log_request(req: &Request) {
     );
 }
 
-async fn index() -> Html<&'static str> {
-		Html("<p>Hello from Axum!</p>")
+use url::Url;
+
+#[worker_route_compat]
+pub async fn index() -> impl IntoResponse {
+		let url = Url::from_str("https://logankeenan.com").unwrap();
+		let mut response = worker::Fetch::Url(url).send().await.unwrap();
+		let body_text = response.text().await.unwrap();
+		Html(body_text)
 }
 
 #[event(fetch)]

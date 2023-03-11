@@ -47,7 +47,6 @@ use worker::{
 };
 pub use error::Error;
 
-
 pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Request<Body>, Error> {
     let method = Method::from_str(worker_request.method().to_string().as_str())?;
 
@@ -101,6 +100,8 @@ pub async fn to_worker_response(mut response: Response) -> Result<WorkerResponse
 
     Ok(worker_response)
 }
+
+pub use axum_cloudflare_adapter_macros::worker_route_compat;
 
 
 #[cfg(test)]
