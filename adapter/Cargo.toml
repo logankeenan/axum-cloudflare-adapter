@@ -16,7 +16,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 axum = { version = "0.6.7", default-features = false }
-worker = { version = "0.0.13 "}
+worker = { git = "https://github.com/FlareLine/workers-rs", branch = "d1-support", features=["d1"] }
 http-body = "0.4.5"
 axum-cloudflare-adapter-macros = { path = "../macros", version = "0.1.0" }
 
