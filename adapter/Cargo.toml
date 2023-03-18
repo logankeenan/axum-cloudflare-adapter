@@ -1,9 +1,9 @@
 [package]
 name = "axum-cloudflare-adapter"
-version = "0.4.0"
+version = "0.4.1"
 edition = "2021"
 authors = ["Logan Keenan"]
-description = "An adapter to easily allow an Axum server to be run within a Cloudflare worker."
+description = "An adapter to easily run an Axum server in a Cloudflare worker."
 rust-version = "1.67.1"
 repository = "https://github.com/logankeenan/axum-cloudflare-adapter"
 license = "MIT"
@@ -19,6 +19,8 @@ axum = { version = "0.6.7", default-features = false }
 worker = { git = "https://github.com/FlareLine/workers-rs", branch = "d1-support", features=["d1"] }
 http-body = "0.4.5"
 axum-cloudflare-adapter-macros = { path = "../macros", version = "0.1.0" }
+oneshot = "0.1.5"
+wasm-bindgen-futures = "0.4.34"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.30"

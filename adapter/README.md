@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/axum-cloudflare-adapter)](https://crates.io/crates/axum-cloudflare-adapter)
 
-An adapter to easily allow an [Axum](https://github.com/tokio-rs/axum) server to be run within a Cloudflare worker.
+An adapter to easily run an [Axum](https://github.com/tokio-rs/axum) server in a Cloudflare worker.
 
 ## Usage
 
