@@ -12,8 +12,8 @@ default = ["console_error_panic_hook"]
 [dependencies]
 cfg-if = "1.0.0"
 worker = "0.0.16"
-serde_json = "1.0.67"
-axum = { version = "0.6.7", default-features = false }
+serde_json = "1.0.96"
+axum = { version = "0.6.16", default-features = false }
 tower-service = "0.3.2"
 axum-cloudflare-adapter = { path = "../adapter" }
 oneshot = "0.1.5"
@@ -24,7 +24,7 @@ url = "2.3.1"
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
-console_error_panic_hook = { version = "0.1.1", optional = true }
+console_error_panic_hook = { version = "0.1.7", optional = true }
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
