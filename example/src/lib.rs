@@ -2,11 +2,11 @@ use std::ops::Deref;
 use std::str::FromStr;
 use axum::{
 		extract::{Path, State},
-		response::{Html},
 		routing::get,
 		Router as AxumRouter,
 		response::IntoResponse,
 };
+use axum::http::header::CONTENT_TYPE;
 use axum_cloudflare_adapter::{EnvWrapper, to_axum_request, to_worker_response, worker_route_compat};
 use tower_service::Service;
 use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures, Var};
@@ -36,7 +36,11 @@ pub async fn index(State(state): State<AxumState>) -> impl IntoResponse {
 
 		console_log!("WORKERS_RS_VERSION: {}", worker_rs_version.to_string());
 
-		Html(body_text)
+		let content_type = response.headers().get("content-type").unwrap().unwrap();
+		axum::response::Response::builder()
+				.header(CONTENT_TYPE, content_type)
+				.body(body_text)
+				.unwrap()
 }
 
 #[worker_route_compat]
@@ -45,7 +49,12 @@ pub async fn with_pathname(Path(path): Path<String>) -> impl IntoResponse {
 		url.set_path(path.as_str());
 		let mut response = worker::Fetch::Url(url).send().await.unwrap();
 		let body_text = response.text().await.unwrap();
-		Html(body_text)
+
+		let content_type = response.headers().get("content-type").unwrap().unwrap();
+		axum::response::Response::builder()
+				.header(CONTENT_TYPE, content_type)
+				.body(body_text)
+				.unwrap()
 }
 
 #[derive(Clone)]
