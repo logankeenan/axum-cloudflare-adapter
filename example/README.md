@@ -1,6 +1,6 @@
 # axum-cloudflare-adapter Demo
 
-A simple demo to test our the features of axum-cloudflare-adapter
+A simple [demo](https://axum-cloudflare-adapter-example.logankeenan.workers.dev) to test out the features of axum-cloudflare-adapter
 
 
 ## Worker Commands
