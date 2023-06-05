@@ -16,7 +16,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 axum = { version = "0.6.16", default-features = false }
-worker = { version = "0.0.16"}
+worker = { version = "0.0.17"}
 http-body = "0.4.5"
 axum-cloudflare-adapter-macros = { path = "../macros", version = "0.1.1" }
 oneshot = "0.1.5"
