@@ -12,7 +12,7 @@
 //! 		Router as AxumRouter,
 //!         extract::State,
 //! };
-//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response, worker_route_compat, EnvWrapper};
+//! use axum_cloudflare_adapter::{to_axum_request, to_worker_response, wasm_compat, EnvWrapper};
 //! use tower_service::Service;
 //! use std::ops::Deref;
 //!
@@ -21,7 +21,7 @@
 //!    	pub env_wrapper: EnvWrapper,
 //! }
 //!
-//! #[worker_route_compat]
+//! #[wasm_compat]
 //! async fn index(State(state): State<AxumState>) -> Html<&'static str> {
 //! 		let env: &Env = state.env_wrapper.env.deref();
 //! 		let worker_rs_version: Var = env.var("WORKERS_RS_VERSION").unwrap();
@@ -115,7 +115,7 @@ pub async fn to_worker_response(mut response: Response) -> Result<WorkerResponse
     Ok(worker_response)
 }
 
-pub use axum_cloudflare_adapter_macros::worker_route_compat;
+pub use axum_wasm_macros::wasm_compat;
 
 #[derive(Clone)]
 pub struct EnvWrapper {

@@ -7,7 +7,7 @@ use axum::{
 		response::IntoResponse,
 };
 use axum::http::header::CONTENT_TYPE;
-use axum_cloudflare_adapter::{EnvWrapper, to_axum_request, to_worker_response, worker_route_compat};
+use axum_cloudflare_adapter::{EnvWrapper, to_axum_request, to_worker_response, wasm_compat};
 use tower_service::Service;
 use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures, Var};
 
@@ -25,7 +25,7 @@ fn log_request(req: &Request) {
 
 use url::Url;
 
-#[worker_route_compat]
+#[wasm_compat]
 pub async fn index(State(state): State<AxumState>) -> impl IntoResponse {
 		let url = Url::from_str("https://logankeenan.com").unwrap();
 		let mut response = worker::Fetch::Url(url).send().await.unwrap();
@@ -43,7 +43,7 @@ pub async fn index(State(state): State<AxumState>) -> impl IntoResponse {
 				.unwrap()
 }
 
-#[worker_route_compat]
+#[wasm_compat]
 pub async fn with_pathname(Path(path): Path<String>) -> impl IntoResponse {
 		let mut url = Url::from_str("https://logankeenan.com").unwrap();
 		url.set_path(path.as_str());
