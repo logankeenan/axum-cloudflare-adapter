@@ -3,4 +3,5 @@
 members = [
     "adapter",
     "example",
+    "macros"
 ]
