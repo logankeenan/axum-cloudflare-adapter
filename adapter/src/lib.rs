@@ -31,15 +31,15 @@
 //! }
 //!
 //! #[event(fetch)]
-//! pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
-//! 		let mut _router: AxumRouter = AxumRouter::new()
+//! async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+//!         let mut router: AxumRouter = AxumRouter::new()
 //! 				.route("/", get(index))
 //!                 .with_state(AxumState {
 //! 				    env_wrapper: EnvWrapper::new(env),
 //! 		        });
 //!
 //! 		let axum_request = to_axum_request(req).await.unwrap();
-//! 		let axum_response = _router.call(axum_request).await.unwrap();
+//! 		let axum_response = router.call(axum_request).await.unwrap();
 //! 		let response = to_worker_response(axum_response).await.unwrap();
 //!
 //! 		Ok(response)

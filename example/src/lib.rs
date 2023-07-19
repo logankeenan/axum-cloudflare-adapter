@@ -9,7 +9,7 @@ use axum::{
 use axum::http::header::CONTENT_TYPE;
 use axum_cloudflare_adapter::{EnvWrapper, to_axum_request, to_worker_response, wasm_compat};
 use tower_service::Service;
-use worker::{console_log, Env, Request, Response, Date, Result, event, wasm_bindgen_futures, Var};
+use worker::{console_log, Env, Request, Response, Date, Result, event, Var};
 
 mod utils;
 
