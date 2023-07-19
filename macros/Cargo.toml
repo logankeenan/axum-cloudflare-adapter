@@ -1,10 +1,10 @@
 [package]
 name = "axum-cloudflare-adapter-macros"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = ["Logan Keenan"]
-description = "An adapter to easily run an Axum server in a Cloudflare worker."
-rust-version = "1.67.1"
+description = "DEPRECEATED: use axum-wasm-macros"
+rust-version = "1.63"
 repository = "https://github.com/logankeenan/axum-cloudflare-adapter"
 license = "MIT"
 keywords = ["Cloudflare", "Axum", "WASM"]
@@ -14,5 +14,3 @@ proc-macro = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-quote = "1.0.26"
-syn = { version = "2.0.15", features = ["full"] }

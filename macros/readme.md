@@ -1,3 +1,3 @@
-# axum-cloudflare-adapter-macros
+# DEPRECATED - axum-cloudflare-adapter-macros
 
-See [axum-cloudflare-adapter](https://github.com/logankeenan/axum-cloudflare-adapter) for details
+This repository has been deprecated in favor of [axum-wasm-macros](https://crates.io/crates/axum-wasm-macros)

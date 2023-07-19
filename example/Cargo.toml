@@ -11,11 +11,12 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 cfg-if = "1.0.0"
-worker = "0.0.16"
+worker = "0.0.17"
 serde_json = "1.0.96"
 axum = { version = "0.6.16", default-features = false }
 tower-service = "0.3.2"
 axum-cloudflare-adapter = { path = "../adapter" }
+wasm-bindgen-futures = "0.4.34"
 oneshot = "0.1.5"
 url = "2.3.1"
 
