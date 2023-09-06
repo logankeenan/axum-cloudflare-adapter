@@ -1,6 +1,6 @@
 [package]
 name = "axum-cloudflare-adapter"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2021"
 authors = ["Logan Keenan"]
 description = "An adapter to easily run an Axum server in a Cloudflare worker."
