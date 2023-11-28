@@ -1,3 +1,5 @@
+#![feature(ascii_char)]
+
 //! Axum Cloudflare Adapter
 //!
 //! A collection of tools allowing Axum to be run within a Cloudflare worker. See example usage below.
@@ -56,6 +58,7 @@ use axum::{
     http::header::HeaderName,
     response::Response,
 };
+use futures::TryStreamExt;
 use worker::{
     Request as WorkerRequest,
     Response as WorkerResponse,
@@ -64,7 +67,7 @@ use worker::{
 pub use error::Error;
 
 pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Request<Body>, Error> {
-    let method = Method::from_str(worker_request.method().to_string().as_str())?;
+    let method = Method::from_bytes(worker_request.method().to_string().as_bytes())?;
 
     let uri = Uri::from_str(worker_request.url()?
         .to_string()
@@ -89,22 +92,23 @@ pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Reques
     Ok(http_request)
 }
 
-pub async fn to_worker_response(mut response: Response) -> Result<WorkerResponse, Error> {
-    let bytes = match http_body::Body::data(response.body_mut()).await {
-        None => vec![],
-        Some(body_bytes) => match body_bytes {
-            Ok(bytes) => bytes.to_vec(),
-            Err(_) => vec![]
-        },
-    };
+pub async fn to_worker_response(response: Response<Body>) -> Result<WorkerResponse, Error> {
+    let mut bytes: Vec<u8> = Vec::<u8>::new();
 
-    let code = response.status().as_u16();
+    let (parts, body) = response.into_parts();
+
+    let mut stream = body.into_data_stream();
+    while let Some(chunk) = stream.try_next().await? {
+        bytes.extend_from_slice(&chunk);
+    }
+
+    let code = parts.status.as_u16();
 
     let mut worker_response = WorkerResponse::from_bytes(bytes)?;
     worker_response = worker_response.with_status(code);
 
     let mut headers = Headers::new();
-    for (key, value) in response.headers().iter() {
+    for (key, value) in parts.headers.iter() {
         headers.set(
             key.as_str(),
             value.to_str()?,
@@ -138,8 +142,7 @@ unsafe impl Sync for EnvWrapper {}
 mod tests {
     use super::*;
     use axum::{
-        body::Bytes,
-        response::{Html},
+        response::Html,
         response::IntoResponse,
     };
     use wasm_bindgen_test::{*};
@@ -171,10 +174,17 @@ mod tests {
         request_init.with_method(WorkerMethod::Post);
         let worker_request = WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
 
-        let mut request = to_axum_request(worker_request).await.unwrap();
+        let request = to_axum_request(worker_request).await.unwrap();
 
-        let body_bytes: Bytes = http_body::Body::data(request.body_mut()).await.unwrap().unwrap();
-        assert_eq!(body_bytes.to_vec(), b"hello world!");
+
+        let mut bytes: Vec<u8> = Vec::<u8>::new();
+
+        let mut stream = request.into_body().into_data_stream();
+        while let Some(chunk) = stream.try_next().await.unwrap() {
+            bytes.extend_from_slice(&chunk);
+        }
+
+        assert_eq!(bytes.to_vec(), b"hello world!");
     }
 
     #[wasm_bindgen_test]
@@ -193,7 +203,7 @@ mod tests {
 
     #[wasm_bindgen_test]
     async fn it_should_convert_the_axum_response_to_a_worker_response_with_an_empty_body() {
-        let body = http_body::combinators::UnsyncBoxBody::default();
+        let body = Body::empty();
         let response = Response::builder()
             .status(200)
             .header("Content-Type", "text/html")
