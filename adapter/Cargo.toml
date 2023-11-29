@@ -1,6 +1,6 @@
 [package]
 name = "axum-cloudflare-adapter"
-version = "0.6.1"
+version = "0.7.1"
 edition = "2021"
 authors = ["Logan Keenan"]
 description = "An adapter to easily run an Axum server in a Cloudflare worker."
@@ -15,10 +15,10 @@ crate-type = ["cdylib", "lib"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = { version = "^0.6.19", default-features = false }
+axum = { version = "^0.7.1", default-features = false }
 worker = { version = "^0.0.18" }
-http-body = "^0.4.5"
 axum-wasm-macros = "^0.1.0"
+futures = "0.3.29"
 
 [dev-dependencies]
 wasm-bindgen-test = "^0.3.34"
