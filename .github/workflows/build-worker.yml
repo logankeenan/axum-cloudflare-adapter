@@ -16,13 +16,14 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install Wrangler
-        run: npm install -g wrangler
+        run: npm install -g wrangler@2.20.1
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: 1.70.0
           target: wasm32-unknown-unknown
+          override: true
 
       - name: Run Wrangler build
         run: |
