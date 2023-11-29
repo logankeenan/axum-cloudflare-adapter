@@ -2,6 +2,7 @@ workers_dev = true
 compatibility_date = "2023-11-29"
 
 main = "build/worker/shim.mjs"
+name = "axum-cloudflare-adapter"
 
 [vars]
 WORKERS_RS_VERSION = "0.0.18"
