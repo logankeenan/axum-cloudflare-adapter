@@ -1,9 +1,10 @@
 workers_dev = true
+compatibility_date = "2023-11-29"
 
 main = "build/worker/shim.mjs"
 
 [vars]
-WORKERS_RS_VERSION = "0.1.8"
+WORKERS_RS_VERSION = "0.0.18"
 
 [build]
 command = "cargo install -q worker-build && worker-build --release"
