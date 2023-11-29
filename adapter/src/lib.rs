@@ -1,5 +1,3 @@
-#![feature(ascii_char)]
-
 //! Axum Cloudflare Adapter
 //!
 //! A collection of tools allowing Axum to be run within a Cloudflare worker. See example usage below.
@@ -50,37 +48,29 @@
 //! ```
 mod error;
 
-use std::str::FromStr;
-use std::sync::Arc;
 use axum::{
     body::Body,
-    http::{Method, Request, Uri},
     http::header::HeaderName,
+    http::{Method, Request, Uri},
     response::Response,
 };
-use futures::TryStreamExt;
-use worker::{
-    Request as WorkerRequest,
-    Response as WorkerResponse,
-    Headers,
-};
 pub use error::Error;
+use futures::TryStreamExt;
+use std::str::FromStr;
+use std::sync::Arc;
+use worker::{Headers, Request as WorkerRequest, Response as WorkerResponse};
 
 pub async fn to_axum_request(mut worker_request: WorkerRequest) -> Result<Request<Body>, Error> {
     let method = Method::from_bytes(worker_request.method().to_string().as_bytes())?;
 
-    let uri = Uri::from_str(worker_request.url()?
-        .to_string()
-        .as_str())?;
+    let uri = Uri::from_str(worker_request.url()?.to_string().as_str())?;
 
     let body = worker_request.bytes().await?;
-
 
     let mut http_request = Request::builder()
         .method(method)
         .uri(uri)
         .body(Body::from(body))?;
-
 
     for (header_name, header_value) in worker_request.headers() {
         http_request.headers_mut().insert(
@@ -109,10 +99,7 @@ pub async fn to_worker_response(response: Response<Body>) -> Result<WorkerRespon
 
     let mut headers = Headers::new();
     for (key, value) in parts.headers.iter() {
-        headers.set(
-            key.as_str(),
-            value.to_str()?,
-        ).unwrap()
+        headers.set(key.as_str(), value.to_str()?).unwrap()
     }
     worker_response = worker_response.with_headers(headers);
 
@@ -128,9 +115,7 @@ pub struct EnvWrapper {
 
 impl EnvWrapper {
     pub fn new(env: worker::Env) -> Self {
-        Self {
-            env: Arc::new(env),
-        }
+        Self { env: Arc::new(env) }
     }
 }
 
@@ -141,12 +126,9 @@ unsafe impl Sync for EnvWrapper {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use axum::{
-        response::Html,
-        response::IntoResponse,
-    };
-    use wasm_bindgen_test::{*};
-    use worker::{RequestInit, ResponseBody, Method as WorkerMethod};
+    use axum::{response::Html, response::IntoResponse};
+    use wasm_bindgen_test::*;
+    use worker::{Method as WorkerMethod, RequestInit, ResponseBody};
     wasm_bindgen_test_configure!(run_in_browser);
 
     #[wasm_bindgen_test]
@@ -157,7 +139,8 @@ mod tests {
         headers.append("Cache-Control", "no-cache").unwrap();
         request_init.with_headers(headers);
         request_init.with_method(WorkerMethod::Get);
-        let worker_request = WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
+        let worker_request =
+            WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
 
         let request = to_axum_request(worker_request).await.unwrap();
 
@@ -172,10 +155,10 @@ mod tests {
         let mut request_init = RequestInit::new();
         request_init.with_body(Some("hello world!".into()));
         request_init.with_method(WorkerMethod::Post);
-        let worker_request = WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
+        let worker_request =
+            WorkerRequest::new_with_init("https://logankeenan.com", &request_init).unwrap();
 
         let request = to_axum_request(worker_request).await.unwrap();
-
 
         let mut bytes: Vec<u8> = Vec::<u8>::new();
 
@@ -193,10 +176,17 @@ mod tests {
         let worker_response = to_worker_response(response).await.unwrap();
 
         assert_eq!(worker_response.status_code(), 200);
-        assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html; charset=utf-8");
+        assert_eq!(
+            worker_response
+                .headers()
+                .get("Content-Type")
+                .unwrap()
+                .unwrap(),
+            "text/html; charset=utf-8"
+        );
         let body = match worker_response.body() {
             ResponseBody::Body(body) => body.clone(),
-            _ => vec![]
+            _ => vec![],
         };
         assert_eq!(body, b"Hello World!");
     }
@@ -210,14 +200,20 @@ mod tests {
             .body(body)
             .unwrap();
 
-
         let worker_response = to_worker_response(response).await.unwrap();
 
         assert_eq!(worker_response.status_code(), 200);
-        assert_eq!(worker_response.headers().get("Content-Type").unwrap().unwrap(), "text/html");
+        assert_eq!(
+            worker_response
+                .headers()
+                .get("Content-Type")
+                .unwrap()
+                .unwrap(),
+            "text/html"
+        );
         let body = match worker_response.body() {
             ResponseBody::Body(body) => body.clone(),
-            _ => b"should be empty".to_vec()
+            _ => b"should be empty".to_vec(),
         };
         assert_eq!(body.len(), 0);
     }
