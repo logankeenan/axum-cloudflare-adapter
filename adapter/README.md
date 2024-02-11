@@ -32,7 +32,7 @@ async fn index(State(state): State<AxumState>) -> Html<&'static str> {
 }
 
 #[event(fetch)]
-pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Response> {
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let mut _router: AxumRouter = AxumRouter::new()
         .route("/", get(index))
         .with_state(AxumState {
