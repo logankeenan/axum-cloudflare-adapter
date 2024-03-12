@@ -1,7 +1,5 @@
 [workspace]
+edition = "2021"
+resolver = "2"
 
-members = [
-    "adapter",
-    "example",
-    "macros"
-]
+members = ["adapter", "example", "macros"]
