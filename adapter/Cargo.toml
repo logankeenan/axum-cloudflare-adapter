@@ -1,6 +1,6 @@
 [package]
 name = "axum-cloudflare-adapter"
-version = "0.7.0"
+version = "0.8.0"
 edition = "2021"
 authors = ["Logan Keenan"]
 description = "An adapter to easily run an Axum server in a Cloudflare worker."
@@ -16,7 +16,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 axum = { version = "^0.7.1", default-features = false }
-worker = { version = "^0.0.18" }
+worker = { version = "^0.0.20" }
 axum-wasm-macros = "^0.1.0"
 futures = "0.3.29"
 
