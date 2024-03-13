@@ -1,15 +1,11 @@
-use axum::http::uri::InvalidUri;
-use axum::http::method::InvalidMethod;
-use axum::http::Error as HttpError;
 use axum::http::header::InvalidHeaderName;
 use axum::http::header::InvalidHeaderValue;
 use axum::http::header::ToStrError;
-use axum::{
-    Error as AxumError,
-};
-use worker::{
-    Error as WorkerError,
-};
+use axum::http::method::InvalidMethod;
+use axum::http::uri::InvalidUri;
+use axum::http::Error as HttpError;
+use axum::Error as AxumError;
+use worker::Error as WorkerError;
 
 #[derive(Debug)]
 // #[non_exhaustive]
