@@ -5,7 +5,7 @@ main = "build/worker/shim.mjs"
 name = "axum-cloudflare-adapter"
 
 [vars]
-WORKERS_RS_VERSION = "0.0.18"
+WORKERS_RS_VERSION = "0.0.21"
 
 [build]
 command = "cargo install -q worker-build && worker-build --release"
