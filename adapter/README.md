@@ -6,12 +6,14 @@ An adapter to easily run an [Axum](https://github.com/tokio-rs/axum) server in a
 
 ## Cloudflare workers perliminary native support for Axum on 0.0.21+
 
-Its hidden behind the feature flag "http".
+Axum support in workers-rs is enabled by the [http](https://github.com/cloudflare/workers-rs?tab=readme-ov-file#http-feature) feature in worker-rs.
 
-This package can be used as an easy way to migrate from the non http version to the http version:
-1. Add the dependency to the adapter and maintain the dependenty to the non http version (http flag disabled)
+This is possible because both Axum and worker-rs http uses the same [http](https://docs.rs/http/latest/http/) crate.
+
+This adapter can be used as an easy way to migrate from the non http workers-rs version to the http version:
+1. Do not change your current workers-rs project dependency on the non http version of workers-rs (keep the http flag disabled).
+1. Add the dependency to this adapter.
 2. Add a catch all route to the existing router:
-
 ```rust
     .or_else_any_method_async("/*catchall", |_, ctx| async move {
 ```
