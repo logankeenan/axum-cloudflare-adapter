@@ -5,7 +5,20 @@
 
 version: 2
 updates:
-  - package-ecosystem: "cargo" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "cargo"
+    directory: "/adapter"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "cargo"
+    directory: "/macros"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "cargo"
+    directory: "/example"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
