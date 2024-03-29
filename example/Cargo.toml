@@ -17,7 +17,7 @@ axum-cloudflare-adapter = { path = "../adapter" }
 oneshot = "0.1.6"
 serde_json = "1.0.108"
 tower-service = "0.3.2"
-url = "2.3.1"
+url = "2.5.0"
 wasm-bindgen-futures = "0.4.34"
 worker = "^0.0.24"
 
