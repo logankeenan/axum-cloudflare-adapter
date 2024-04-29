@@ -16,7 +16,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install Wrangler
-        run: npm install -g wrangler@3.35.0
+        run: npm install -g wrangler@3.52.0
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
