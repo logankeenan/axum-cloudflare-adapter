@@ -16,7 +16,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 axum = { version = "^0.7.1", default-features = false }
-worker = { version = "^0.2.0" }
+worker = { version = "^0.3.2" }
 axum-wasm-macros = "^0.1.0"
 futures = "0.3.29"
 
