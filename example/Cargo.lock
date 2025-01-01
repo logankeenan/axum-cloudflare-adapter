@@ -36,11 +36,10 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "axum"
-version = "0.7.9"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f"
+checksum = "6d6fd624c75e18b3b4c6b9caf42b1afe24437daaee904069137d8bab077be8b8"
 dependencies = [
- "async-trait",
  "axum-core",
  "bytes",
  "futures-util",
@@ -48,14 +47,14 @@ dependencies = [
  "http-body",
  "http-body-util",
  "itoa",
- "matchit",
+ "matchit 0.8.4",
  "memchr",
  "mime",
  "percent-encoding",
  "pin-project-lite",
  "rustversion",
  "serde",
- "sync_wrapper 1.0.0",
+ "sync_wrapper",
  "tower",
  "tower-layer",
  "tower-service",
@@ -73,11 +72,10 @@ dependencies = [
 
 [[package]]
 name = "axum-core"
-version = "0.4.5"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09f2bd6146b97ae3359fa0cc6d6b376d9539582c7b4220f041a33ec24c226199"
+checksum = "df1362f362fd16024ae199c1970ce98f9661bf5ef94b9808fee734bc3698b733"
 dependencies = [
- "async-trait",
  "bytes",
  "futures-util",
  "http",
@@ -86,7 +84,7 @@ dependencies = [
  "mime",
  "pin-project-lite",
  "rustversion",
- "sync_wrapper 1.0.0",
+ "sync_wrapper",
  "tower-layer",
  "tower-service",
 ]
@@ -498,6 +496,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b87248edafb776e59e6ee64a79086f65890d3510f2c656c000bf2a7e8a0aea40"
 
 [[package]]
+name = "matchit"
+version = "0.8.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "47e1ffaa40ddd1f3ed91f717a33c8c0ee23fff369e3aa8772b9605cc1d22f4c3"
+
+[[package]]
 name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -733,12 +737,6 @@ dependencies = [
 
 [[package]]
 name = "sync_wrapper"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2047c6ded9c721764247e62cd3b03c09ffc529b2ba5b10ec482ae507a4a70160"
-
-[[package]]
-name = "sync_wrapper"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "384595c11a4e2969895cad5a8c4029115f5ab956a9e5ef4de79d11a426e5f20c"
@@ -813,14 +811,14 @@ dependencies = [
 
 [[package]]
 name = "tower"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2873938d487c3cfb9aed7546dc9f2711d867c9f90c46b889989a2cb84eba6b4f"
+checksum = "d039ad9159c98b70ecfd540b2573b97f7f52c3e8d9f8ad57a24b916a536975f9"
 dependencies = [
  "futures-core",
  "futures-util",
  "pin-project-lite",
- "sync_wrapper 0.1.2",
+ "sync_wrapper",
  "tower-layer",
  "tower-service",
 ]
@@ -958,9 +956,9 @@ dependencies = [
 
 [[package]]
 name = "worker"
-version = "0.4.2"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8aca53ec63e508176a89a573c972266f0f98bcc48bd866def7be0d939ef9268"
+checksum = "727789ca7eff9733efbea9d0e97779edc1cf1926e98aee7d7d8afe32805458aa"
 dependencies = [
  "async-trait",
  "bytes",
@@ -970,7 +968,7 @@ dependencies = [
  "http",
  "http-body",
  "js-sys",
- "matchit",
+ "matchit 0.7.0",
  "pin-project",
  "serde",
  "serde-wasm-bindgen 0.6.5",
@@ -1004,9 +1002,9 @@ dependencies = [
 
 [[package]]
 name = "worker-macros"
-version = "0.4.2"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1118a0ceb59ddde7fdbaff6c47b6fa6ee47848975ea38b4ae9bb4080f96541cd"
+checksum = "7d625c24570ba9207a2617476013335f28a95cbe513e59bb814ffba092a18058"
 dependencies = [
  "async-trait",
  "proc-macro2",
@@ -1020,9 +1018,9 @@ dependencies = [
 
 [[package]]
 name = "worker-sys"
-version = "0.4.2"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5643a2ba07df61aa50e37212ffcb0944417db7d3960d4331f36aeb2fa5e2fd7"
+checksum = "34563340d41016b4381257c5a16b0d2bc590dbe00500ecfbebcaa16f5f85ce90"
 dependencies = [
  "cfg-if",
  "js-sys",
