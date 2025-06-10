@@ -11,7 +11,7 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-cfg-if = "1.0.0"
+cfg-if = "1.0.1"
 axum = { version = "^0.8.4", default-features = false }
 axum-cloudflare-adapter = { path = "../adapter" }
 oneshot = "0.1.11"
